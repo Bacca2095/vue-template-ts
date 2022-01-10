@@ -12,6 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
     steps:
+      - uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_VUE_APP_API_KEY: "${{ secrets.VUE_APP_API_KEY }}"
+          envkey_VUE_APP_AUTH_DOMAIN: "${{ secrets.VUE_APP_AUTH_DOMAIN }}"
+          envkey_VUE_APP_PROJECT_ID: "${{ secrets.VUE_APP_PROJECT_ID }}"
+          envkey_VUE_APP_STORAGE_BUCKET: "${{ secrets.VUE_APP_STORAGE_BUCKET }}"
+          envkey_VUE_APP_MESSAGING_SENDER_ID: "${{ secrets.VUE_APP_MESSAGING_SENDER_ID }}"
+          envkey_VUE_APP_APP_ID: "${{ secrets.VUE_APP_APP_ID }}"
+          envkey_VUE_APP_MEASUREMENT_ID: "${{ secrets.VUE_APP_MEASUREMENT_ID }}"
+          directory: ${{ github.workspace }}
+          file_name: .env
       - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run lint
@@ -23,11 +34,3 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_VUE_TEMPLATE_TS }}"
           channelId: live
           projectId: vue-template-ts
-        env:
-          VUE_APP_API_KEY: "${{ secrets.VUE_APP_API_KEY }}"
-          VUE_APP_AUTH_DOMAIN: "${{ secrets.VUE_APP_AUTH_DOMAIN }}"
-          VUE_APP_PROJECT_ID: "${{ secrets.VUE_APP_PROJECT_ID }}"
-          VUE_APP_STORAGE_BUCKET: "${{ secrets.VUE_APP_STORAGE_BUCKET }}"
-          VUE_APP_MESSAGING_SENDER_ID: "${{ secrets.VUE_APP_MESSAGING_SENDER_ID }}"
-          VUE_APP_APP_ID: "${{ secrets.VUE_APP_APP_ID }}"
-          VUE_APP_MEASUREMENT_ID: "${{ secrets.VUE_APP_MEASUREMENT_ID }}"
