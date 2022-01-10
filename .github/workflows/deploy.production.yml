@@ -23,8 +23,11 @@ jobs:
           envkey_VUE_APP_MEASUREMENT_ID: ${{ secrets.VUE_APP_MEASUREMENT_ID }}
           directory: ./
           file_name: .env.production
+      - run: ls
+      - run: pwd
       - uses: actions/checkout@v2
       - run: ls
+      - run: pwd
       - run: npm ci
       - run: npm run lint
       - run: npm run test:unit
