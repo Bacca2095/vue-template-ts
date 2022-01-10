@@ -22,7 +22,7 @@ jobs:
           envkey_VUE_APP_APP_ID: "${{ secrets.VUE_APP_APP_ID }}"
           envkey_VUE_APP_MEASUREMENT_ID: "${{ secrets.VUE_APP_MEASUREMENT_ID }}"
           directory: ${{ github.workspace }}
-          file_name: .env
+          file_name: .env.production
       - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run lint
