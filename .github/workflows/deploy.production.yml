@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
     steps:
-      - name: Create .env file
-        uses: ozaytsev86/create-env-file@v1
+      - uses: ozaytsev86/create-env-file@v1
         with:
           ENV_VUE_APP_API_KEY: ${{ secrets.VUE_APP_API_KEY }}
           ENV_VUE_APP_AUTH_DOMAIN: ${{ secrets.VUE_APP_AUTH_DOMAIN }}
@@ -23,16 +22,15 @@ jobs:
           ENV_VUE_APP_APP_ID: ${{ secrets.VUE_APP_APP_ID }}
           ENV_VUE_APP_MEASUREMENT_ID: ${{ secrets.VUE_APP_MEASUREMENT_ID }}
           file-name: .env.production
-        run: ls
-      - name: Build
-        uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run lint
       - run: npm run test:unit
       - run: npm run build
       - run: ls
-      - name: Deploy
-        uses: FirebaseExtended/action-hosting-deploy@v0
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_VUE_TEMPLATE_TS }}"
