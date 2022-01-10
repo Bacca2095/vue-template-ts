@@ -8,20 +8,15 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - master
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
+    name: Build
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
       - run: npm run lint
       - run: npm run test:unit
       - run: npm run build
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_VUE_TEMPLATE_TS }}"
-          channelId: live
-          projectId: vue-template-ts
         env:
           VUE_APP_API_KEY: "${{ secrets.VUE_APP_API_KEY }}"
           VUE_APP_AUTH_DOMAIN: "${{ secrets.VUE_APP_AUTH_DOMAIN }}"
@@ -30,3 +25,13 @@ jobs:
           VUE_APP_MESSAGING_SENDER_ID: "${{ secrets.VUE_APP_MESSAGING_SENDER_ID }}"
           VUE_APP_APP_ID: "${{ secrets.VUE_APP_APP_ID }}"
           VUE_APP_MEASUREMENT_ID: "${{ secrets.VUE_APP_MEASUREMENT_ID }}"
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_VUE_TEMPLATE_TS }}"
+          channelId: live
+          projectId: vue-template-ts
