@@ -13,6 +13,7 @@ jobs:
     steps:
     - name: Create .env file
       uses: SpicyPizza/create-envfile@v1.2
+    - run: pwd
       with:
         envkey_VUE_APP_API_KEY: ${{ secrets.VUE_APP_API_KEY }}
         envkey_VUE_APP_AUTH_DOMAIN: ${{ secrets.VUE_APP_AUTH_DOMAIN }}
@@ -21,7 +22,7 @@ jobs:
         envkey_VUE_APP_MESSAGING_SENDER_ID: ${{ secrets.VUE_APP_MESSAGING_SENDER_ID }}
         envkey_VUE_APP_APP_ID: ${{ secrets.VUE_APP_APP_ID }}
         envkey_VUE_APP_MEASUREMENT_ID: ${{ secrets.VUE_APP_MEASUREMENT_ID }}
-        directory: .
+        directory: ./
         file_name: .env.production
   build_and_deploy:
     runs-on: ubuntu-latest
