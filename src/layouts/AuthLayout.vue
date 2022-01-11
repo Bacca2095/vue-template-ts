@@ -1,14 +1,9 @@
 <template>
   <div class="auth-layout">
-    <div class="row g-0">
-      <div class="col">
+    <div class="row g-0 align-items-center">
+      <div class="col align-self-center">
         <div class="card border-0 shadow rounded p-3">
           <div class="card-body m-5">
-            <div class="row">
-              <div class="col text-center">
-                <h1>Login</h1>
-              </div>
-            </div>
             <slot />
           </div>
         </div>
