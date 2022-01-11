@@ -3,7 +3,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+// eslint-disable-next-line object-curly-newline
+import { defineComponent, onMounted, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
 
-export default defineComponent({});
+export default defineComponent({
+  setup() {
+    const { dispatch } = useStore();
+    onMounted(() => {
+      dispatch('setLoading', false);
+    });
+
+    onUnmounted(() => {
+      dispatch('setLoading', true);
+    });
+  },
+});
 </script>

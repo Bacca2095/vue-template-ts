@@ -18,6 +18,7 @@
     "secure-ls": "^1.2.6",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
+    "vue-loading-overlay": "^5.0.3",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
     "vuex-persistedstate": "^4.1.0"

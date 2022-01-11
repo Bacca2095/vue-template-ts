@@ -55,7 +55,8 @@
 
 <script lang="ts">
 import Button from '@/components/Button.vue';
-import { defineComponent, reactive, toRef } from 'vue';
+// eslint-disable-next-line object-curly-newline
+import { defineComponent, onMounted, onUnmounted, reactive, toRef } from 'vue';
 import { useStore } from 'vuex';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import useVuelidate from '@vuelidate/core';
@@ -75,7 +76,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
-    const store = useStore();
+    const { dispatch } = useStore();
     const form = reactive({
       email: '',
       password: '',
@@ -90,9 +91,9 @@ export default defineComponent({
     });
 
     const saveUser = (data: UserData) => {
-      store.dispatch('setName', data.name);
-      store.dispatch('setPhotoUrl', data.photo);
-      store.dispatch('setEmail', data.email);
+      dispatch('setName', data.name);
+      dispatch('setPhotoUrl', data.photo);
+      dispatch('setEmail', data.email);
     };
 
     const onSubmit = async () => {
@@ -131,6 +132,14 @@ export default defineComponent({
         }
       }
     };
+
+    onMounted(() => {
+      dispatch('setLoading', false);
+    });
+
+    onUnmounted(() => {
+      dispatch('setLoading', true);
+    });
 
     return {
       v$,
