@@ -9,6 +9,7 @@ export default createStore({
     name: null,
     photoUrl: null,
     email: null,
+    loading: true,
   },
   mutations: {
     setName(state, name) {
@@ -20,6 +21,9 @@ export default createStore({
     setEmail(state, email) {
       state.email = email;
     },
+    setLoading(state, loading) {
+      state.loading = loading;
+    },
   },
   actions: {
     setName(context, name) {
@@ -30,6 +34,9 @@ export default createStore({
     },
     setEmail(context, email) {
       context.commit('setEmail', email);
+    },
+    setLoading(context, loading) {
+      context.commit('setLoading', loading);
     },
   },
   modules: {},

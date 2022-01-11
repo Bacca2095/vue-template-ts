@@ -47,12 +47,13 @@
 
 <script lang="ts">
 import Button from '@/components/Button.vue';
-
-import { defineComponent, reactive, toRef } from 'vue';
+// eslint-disable-next-line object-curly-newline
+import { defineComponent, onMounted, onUnmounted, reactive, toRef } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   components: {
@@ -60,6 +61,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { dispatch } = useStore();
     const router = useRouter();
     const form = reactive({
       email: '',
@@ -92,6 +94,14 @@ export default defineComponent({
         }
       }
     };
+
+    onMounted(() => {
+      dispatch('setLoading', false);
+    });
+
+    onUnmounted(() => {
+      dispatch('setLoading', true);
+    });
 
     return { v$, onSubmit };
   },

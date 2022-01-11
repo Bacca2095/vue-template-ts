@@ -1,5 +1,13 @@
 <template>
-  <main class="container-fluid">
+  <main class="container-fluid vld-parent">
+    <loading
+      v-model:active="loading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :opacity="0.7"
+    >
+      <div class="spinner"></div>
+    </loading>
     <router-view v-slot="{ Component }">
       <component :is="route.meta.layout || 'div'">
         <component :is="Component" />
@@ -9,14 +17,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default defineComponent({
+  components: { Loading },
   setup() {
     const route = useRoute();
+    const { state } = useStore();
 
-    return { route };
+    return { route, loading: computed(() => state.loading) };
   },
 });
 </script>
