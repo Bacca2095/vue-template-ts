@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
     steps:
+      - uses: actions/checkout@v2
+
       - uses: SpicyPizza/create-envfile@v1
         with:
           envkey_VUE_APP_API_KEY: ${{ secrets.VUE_APP_API_KEY }}
@@ -24,7 +26,6 @@ jobs:
           directory: ./src
           file_name: .env.production
 
-      - uses: actions/checkout@v2
       - run: ls -a
       - run: cd src && ls -a
       - run: npm ci
