@@ -21,15 +21,16 @@ jobs:
           envkey_VUE_APP_MESSAGING_SENDER_ID: ${{ secrets.VUE_APP_MESSAGING_SENDER_ID }}
           envkey_VUE_APP_APP_ID: ${{ secrets.VUE_APP_APP_ID }}
           envkey_VUE_APP_MEASUREMENT_ID: ${{ secrets.VUE_APP_MEASUREMENT_ID }}
-          some_other_variable: foobar
+          directory: ${{ github.workspace }}/src
           file_name: .env.production
 
       - uses: actions/checkout@v2
+      - run: cd src && ls -a
+      - run: cd .. && ls -a
       - run: npm ci
       - run: npm run lint
       - run: npm run test:unit
       - run: npm run build
-      - run: ls -a
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
