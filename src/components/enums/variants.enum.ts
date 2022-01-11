@@ -8,6 +8,7 @@ enum Variants {
   INFO = 'info',
   LIGHT = 'light',
   DARK = 'dark',
+  LINK = 'link',
 }
 
 export default Variants;

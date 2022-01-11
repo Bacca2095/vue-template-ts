@@ -2,7 +2,7 @@
   <form @submit.prevent="onSubmit" novalidate>
     <div class="row">
       <div class="col text-center">
-        <h3>Inicio de sesión</h3>
+        <h3>Registrarse</h3>
       </div>
     </div>
     <div class="row my-3">
@@ -14,7 +14,6 @@
           placeholder="Correo"
           v-model="v$.email.$model"
           type="email"
-          autocomplete="off"
         />
       </div>
     </div>
@@ -33,20 +32,13 @@
     </div>
     <div class="row my-4">
       <div class="col text-center">
-        <b-button type="submit" variant="primary">Iniciar sesión</b-button>
+        <b-button type="submit" variant="primary">Registrarse</b-button>
       </div>
     </div>
-    <div class="row my-2">
+    <div class="row my-4">
       <div class="col text-center">
-        <router-link :to="{ name: 'register' }">
-          <b-button type="submit" variant="link" size="sm">Registrarse</b-button>
-        </router-link>
-      </div>
-    </div>
-    <div class="row my-2">
-      <div class="col text-center">
-        <router-link :to="{ name: 'reset-password' }">
-          <b-button type="submit" variant="link" size="sm">Recuperar contraseña</b-button>
+        <router-link :to="{ name: 'login' }">
+          <b-button variant="link" size="sm">Volver</b-button>
         </router-link>
       </div>
     </div>
@@ -55,18 +47,12 @@
 
 <script lang="ts">
 import Button from '@/components/Button.vue';
+
 import { defineComponent, reactive, toRef } from 'vue';
-import { useStore } from 'vuex';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import { useRouter } from 'vue-router';
-
-export interface UserData {
-  name: string | null;
-  photo: string | null;
-  email: string | null;
-}
 
 export default defineComponent({
   components: {
@@ -75,7 +61,6 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
-    const store = useStore();
     const form = reactive({
       email: '',
       password: '',
@@ -84,16 +69,11 @@ export default defineComponent({
       email: { required, email },
       password: { required },
     };
+
     const v$ = useVuelidate(rules, {
       email: toRef(form, 'email'),
       password: toRef(form, 'password'),
     });
-
-    const saveUser = (data: UserData) => {
-      store.dispatch('setName', data.name);
-      store.dispatch('setPhotoUrl', data.photo);
-      store.dispatch('setEmail', data.email);
-    };
 
     const onSubmit = async () => {
       const result = await v$.value.$validate();
@@ -101,42 +81,19 @@ export default defineComponent({
       if (result) {
         try {
           const auth = getAuth();
-          const { user } = await signInWithEmailAndPassword(
+          const { user } = await createUserWithEmailAndPassword(
             auth,
             form.email,
             form.password
           );
-
-          saveUser({ name: user.displayName, photo: user.photoURL, email: user.email });
-
-          onAuthStateChanged(auth, (userState) => {
-            if (userState) {
-              saveUser({
-                name: userState.displayName,
-                photo: userState.photoURL,
-                email: userState.email,
-              });
-            } else {
-              saveUser({
-                name: null,
-                photo: null,
-                email: null,
-              });
-            }
-          });
-
-          router.push({ name: 'home' });
+          if (user) router.push({ name: 'login' });
         } catch (error) {
           console.log(error);
         }
       }
     };
 
-    return {
-      v$,
-      onSubmit,
-      form,
-    };
+    return { v$, onSubmit };
   },
 });
 </script>

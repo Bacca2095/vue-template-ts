@@ -14,8 +14,6 @@ const firebaseConfig = {
   measurementId: process.env.VUE_APP_MEASUREMENT_ID,
 };
 
-console.log(firebaseConfig);
-
 initializeApp(firebaseConfig);
 
 createApp(App).use(store).use(router).mount('#app');
