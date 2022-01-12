@@ -14,3 +14,16 @@ describe('App.vue', () => {
     expect(wrapper).toBeTruthy();
   });
 });
+
+describe('App.vue', () => {
+  it('Navigate to home', async () => {
+    const wrapper = shallowMount(App, {
+      global: {
+        plugins: [store, router],
+      },
+    });
+    await router.isReady();
+
+    expect(wrapper.html()).toContain('vld-parent');
+  });
+});

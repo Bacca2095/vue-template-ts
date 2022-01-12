@@ -11,6 +11,7 @@
           :class="`form-control ${
             v$.email.$dirty ? (!v$.email.$invalid ? 'is-valid' : 'is-invalid') : ''
           }`"
+          data-testid="login-email"
           placeholder="Correo"
           v-model="v$.email.$model"
           type="email"
@@ -25,6 +26,7 @@
             v$.password.$dirty ? (!v$.password.$invalid ? 'is-valid' : 'is-invalid') : ''
           }`"
           placeholder="Contraseña"
+          data-testid="login-password"
           v-model="v$.password.$model"
           type="password"
           autocomplete="off"
@@ -33,20 +35,30 @@
     </div>
     <div class="row my-4">
       <div class="col text-center">
-        <b-button type="submit" variant="primary">Iniciar sesión</b-button>
+        <b-button type="submit" data-testid="login-submit" variant="primary"
+          >Iniciar sesión</b-button
+        >
       </div>
     </div>
     <div class="row my-2">
       <div class="col text-center">
         <router-link :to="{ name: 'register' }">
-          <b-button type="submit" variant="link" size="sm">Registrarse</b-button>
+          <b-button type="submit" data-testid="login-register" variant="link" size="sm"
+            >Registrarse</b-button
+          >
         </router-link>
       </div>
     </div>
     <div class="row my-2">
       <div class="col text-center">
         <router-link :to="{ name: 'reset-password' }">
-          <b-button type="submit" variant="link" size="sm">Recuperar contraseña</b-button>
+          <b-button
+            type="submit"
+            data-testid="login-reset-password"
+            variant="link"
+            size="sm"
+            >Recuperar contraseña</b-button
+          >
         </router-link>
       </div>
     </div>
