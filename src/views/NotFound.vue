@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line object-curly-newline
 import { defineComponent, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 
