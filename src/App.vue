@@ -21,7 +21,6 @@ import { computed, defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default defineComponent({
   components: { Loading },
@@ -36,4 +35,5 @@ export default defineComponent({
 
 <style lang="scss">
 @import './assets/scss/app.scss';
+@import '../node_modules/vue-loading-overlay/dist/vue-loading.css';
 </style>
