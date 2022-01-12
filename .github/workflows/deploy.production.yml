@@ -10,11 +10,27 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build
+    name: build-and-deploy
     steps:
       - uses: actions/checkout@v2
 
-      - uses: SpicyPizza/create-envfile@v1
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Execute Linter
+        run: npm run lint
+
+      - name: Execute Unit Test
+        run: npm run test:unit
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Create env
+        uses: SpicyPizza/create-envfile@v1
         with:
           envkey_VUE_APP_API_KEY: ${{ secrets.VUE_APP_API_KEY }}
           envkey_VUE_APP_AUTH_DOMAIN: ${{ secrets.VUE_APP_AUTH_DOMAIN }}
@@ -25,18 +41,11 @@ jobs:
           envkey_VUE_APP_MEASUREMENT_ID: ${{ secrets.VUE_APP_MEASUREMENT_ID }}
           file_name: .env.production
 
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run test:unit
-      - run: npm run build
+      - name: Create Build
+        run: npm run build
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_VUE_TEMPLATE_TS }}"
