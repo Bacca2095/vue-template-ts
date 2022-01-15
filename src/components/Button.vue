@@ -4,23 +4,20 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Sizes from './enums/sizes.enum';
-import Variants from './enums/variants.enum';
+<script setup lang="ts">
+import { defineProps } from 'vue';
+import sizes from './enums/sizes.enum';
+import variants from './enums/variants.enum';
 
-export default defineComponent({
-  name: 'b-button',
-  props: {
-    text: String,
-    variant: {
-      type: String,
-      validator: (variant: Variants) => Object.values(Variants).includes(variant),
-    },
-    size: {
-      type: String,
-      validator: (size: Sizes) => Object.values(Sizes).includes(size),
-    },
+defineProps({
+  text: String,
+  variant: {
+    type: String,
+    validator: (variant: variants) => Object.values(variants).includes(variant),
+  },
+  size: {
+    type: String,
+    validator: (size: sizes) => Object.values(sizes).includes(size),
   },
 });
 </script>

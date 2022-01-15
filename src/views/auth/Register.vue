@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" novalidate>
+  <form @submit.prevent="onSubmit" novalidate autocomplete="off">
     <div class="row">
       <div class="col text-center">
         <h3>Registrarse</h3>
@@ -32,78 +32,55 @@
     </div>
     <div class="row my-4">
       <div class="col text-center">
-        <b-button type="submit" variant="primary">Registrarse</b-button>
+        <Button type="submit" variant="primary">Registrarse</Button>
       </div>
     </div>
     <div class="row my-4">
       <div class="col text-center">
         <router-link :to="{ name: 'login' }">
-          <b-button variant="link" size="sm">Volver</b-button>
+          <Button variant="link" size="sm">Volver</Button>
         </router-link>
       </div>
     </div>
   </form>
 </template>
 
-<script lang="ts">
-import Button from '@/components/Button.vue';
-// eslint-disable-next-line object-curly-newline
-import { defineComponent, onMounted, onUnmounted, reactive, toRef } from 'vue';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+<script setup lang="ts">
+import * as Button from '@/components/Button.vue';
+import { reactive, toRef } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
+import useLoad from '@/use/load';
+import useFirebase from '@/use/firebase';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 
-export default defineComponent({
-  components: {
-    'b-button': Button,
-  },
-
-  setup() {
-    const { dispatch } = useStore();
-    const router = useRouter();
-    const form = reactive({
-      email: '',
-      password: '',
-    });
-    const rules = {
-      email: { required, email },
-      password: { required },
-    };
-
-    const v$ = useVuelidate(rules, {
-      email: toRef(form, 'email'),
-      password: toRef(form, 'password'),
-    });
-
-    const onSubmit = async () => {
-      const result = await v$.value.$validate();
-
-      if (result) {
-        try {
-          const auth = getAuth();
-          const { user } = await createUserWithEmailAndPassword(
-            auth,
-            form.email,
-            form.password
-          );
-          if (user) router.push({ name: 'login' });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-
-    onMounted(() => {
-      dispatch('setLoading', false);
-    });
-
-    onUnmounted(() => {
-      dispatch('setLoading', true);
-    });
-
-    return { v$, onSubmit };
-  },
+useLoad();
+const router = useRouter();
+const { registerOnFirebase } = useFirebase();
+const form = reactive({
+  email: '',
+  password: '',
 });
+const rules = {
+  email: { required, email },
+  password: { required },
+};
+
+const v$ = useVuelidate(rules, {
+  email: toRef(form, 'email'),
+  password: toRef(form, 'password'),
+});
+
+const onSubmit = async () => {
+  const result = await v$.value.$validate();
+
+  if (result) {
+    try {
+      registerOnFirebase(form.email, form.password);
+      router.push({ name: 'login' });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 </script>

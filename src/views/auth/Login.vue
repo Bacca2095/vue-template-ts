@@ -9,11 +9,15 @@
       <div class="col text-center">
         <input
           :class="`form-control ${
-            v$.email.$dirty ? (!v$.email.$invalid ? 'is-valid' : 'is-invalid') : ''
+            v$.userEmail.$dirty
+              ? !v$.userEmail.$invalid
+                ? 'is-valid'
+                : 'is-invalid'
+              : ''
           }`"
           data-testid="login-email"
           placeholder="Correo"
-          v-model="v$.email.$model"
+          v-model="v$.userEmail.$model"
           type="email"
           autocomplete="off"
         />
@@ -23,11 +27,15 @@
       <div class="col text-center">
         <input
           :class="`form-control ${
-            v$.password.$dirty ? (!v$.password.$invalid ? 'is-valid' : 'is-invalid') : ''
+            v$.userPassword.$dirty
+              ? !v$.userPassword.$invalid
+                ? 'is-valid'
+                : 'is-invalid'
+              : ''
           }`"
           placeholder="Contraseña"
-          data-testid="login-password"
-          v-model="v$.password.$model"
+          data-testid="login-userPassword"
+          v-model="v$.userPassword.$model"
           type="password"
           autocomplete="off"
         />
@@ -35,16 +43,16 @@
     </div>
     <div class="row my-4">
       <div class="col text-center">
-        <b-button type="submit" data-testid="login-submit" variant="primary"
-          >Iniciar sesión</b-button
+        <Button type="submit" data-testid="login-submit" variant="primary"
+          >Iniciar sesión</Button
         >
       </div>
     </div>
     <div class="row my-2">
       <div class="col text-center">
         <router-link :to="{ name: 'register' }">
-          <b-button type="submit" data-testid="login-register" variant="link" size="sm"
-            >Registrarse</b-button
+          <Button type="submit" data-testid="login-register" variant="link" size="sm"
+            >Registrarse</Button
           >
         </router-link>
       </div>
@@ -52,12 +60,12 @@
     <div class="row my-2">
       <div class="col text-center">
         <router-link :to="{ name: 'reset-password' }">
-          <b-button
+          <Button
             type="submit"
             data-testid="login-reset-password"
             variant="link"
             size="sm"
-            >Recuperar contraseña</b-button
+            >Recuperar contraseña</Button
           >
         </router-link>
       </div>
@@ -65,99 +73,44 @@
   </form>
 </template>
 
-<script lang="ts">
-import Button from '@/components/Button.vue';
-// eslint-disable-next-line object-curly-newline
-import { defineComponent, onMounted, onUnmounted, reactive, toRef } from 'vue';
-import { useStore } from 'vuex';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+<script setup lang="ts">
+import { defineAsyncComponent, reactive, toRef } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
+import useLoad from '@/use/load';
+import useFirebase from '@/use/firebase/index';
 import { useRouter } from 'vue-router';
 
-export interface UserData {
-  name: string | null;
-  photo: string | null;
-  email: string | null;
-}
+const Button = defineAsyncComponent(() => import('@/components/Button.vue'));
 
-export default defineComponent({
-  components: {
-    'b-button': Button,
-  },
+useLoad();
+const router = useRouter();
+const { loginOnFirebase } = useFirebase();
 
-  setup() {
-    const router = useRouter();
-    const { dispatch } = useStore();
-    const form = reactive({
-      email: '',
-      password: '',
-    });
-    const rules = {
-      email: { required, email },
-      password: { required },
-    };
-    const v$ = useVuelidate(rules, {
-      email: toRef(form, 'email'),
-      password: toRef(form, 'password'),
-    });
-
-    const saveUser = (data: UserData) => {
-      dispatch('setName', data.name);
-      dispatch('setPhotoUrl', data.photo);
-      dispatch('setEmail', data.email);
-    };
-
-    const onSubmit = async () => {
-      const result = await v$.value.$validate();
-
-      if (result) {
-        try {
-          const auth = getAuth();
-          const { user } = await signInWithEmailAndPassword(
-            auth,
-            form.email,
-            form.password
-          );
-
-          saveUser({ name: user.displayName, photo: user.photoURL, email: user.email });
-
-          onAuthStateChanged(auth, (userState) => {
-            if (userState) {
-              saveUser({
-                name: userState.displayName,
-                photo: userState.photoURL,
-                email: userState.email,
-              });
-            } else {
-              saveUser({
-                name: null,
-                photo: null,
-                email: null,
-              });
-            }
-          });
-
-          router.push({ name: 'home' });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-
-    onMounted(() => {
-      dispatch('setLoading', false);
-    });
-
-    onUnmounted(() => {
-      dispatch('setLoading', true);
-    });
-
-    return {
-      v$,
-      onSubmit,
-      form,
-    };
-  },
+const form = reactive({
+  userEmail: '',
+  userPassword: '',
 });
+
+const rules = {
+  userEmail: { required, email },
+  userPassword: { required },
+};
+const v$ = useVuelidate(rules, {
+  userEmail: toRef(form, 'userEmail'),
+  userPassword: toRef(form, 'userPassword'),
+});
+
+const onSubmit = async () => {
+  const result = await v$.value.$validate();
+
+  if (result) {
+    try {
+      loginOnFirebase(form.userEmail, form.userPassword);
+      router.push({ name: 'home' });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 </script>
