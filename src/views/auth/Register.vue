@@ -1,28 +1,18 @@
 <template>
   <form @submit.prevent="onSubmit" novalidate autocomplete="off">
-    <div class="row">
-      <div class="col text-center">
-        <h3>Registrarse</h3>
+    <div class="flex my-6">
+      <div class="w-full text-center">
+        <h3 class="text-2xl font-bold">Registrarse</h3>
       </div>
     </div>
-    <div class="row my-3">
-      <div class="col text-center">
-        <input
-          :class="`form-control ${
-            v$.email.$dirty ? (!v$.email.$invalid ? 'is-valid' : 'is-invalid') : ''
-          }`"
-          placeholder="Correo"
-          v-model="v$.email.$model"
-          type="email"
-        />
+    <div class="flex my-3">
+      <div class="w-full text-center">
+        <Input placeholder="Correo" v-model="v$.email.$model" type="email" />
       </div>
     </div>
-    <div class="row my-3">
-      <div class="col text-center">
-        <input
-          :class="`form-control ${
-            v$.password.$dirty ? (!v$.password.$invalid ? 'is-valid' : 'is-invalid') : ''
-          }`"
+    <div class="flex my-3">
+      <div class="w-full text-center">
+        <Input
           placeholder="Contraseña"
           v-model="v$.password.$model"
           type="password"
@@ -30,15 +20,15 @@
         />
       </div>
     </div>
-    <div class="row my-4">
-      <div class="col text-center">
-        <Button type="submit" variant="primary">Registrarse</Button>
+    <div class="flex my-4">
+      <div class="w-full text-center">
+        <Button type="submit">Registrarse</Button>
       </div>
     </div>
-    <div class="row my-4">
-      <div class="col text-center">
+    <div class="flex my-4">
+      <div class="w-full text-center">
         <router-link :to="{ name: 'login' }">
-          <Button variant="link" size="sm">Volver</Button>
+          <Link size="sm">Volver</Link>
         </router-link>
       </div>
     </div>
@@ -46,13 +36,16 @@
 </template>
 
 <script setup lang="ts">
-import * as Button from '@/components/Button.vue';
-import { reactive, toRef } from 'vue';
+import { defineAsyncComponent, reactive, toRef } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import useLoad from '@/use/load';
 import useFirebase from '@/use/firebase';
 import { useRouter } from 'vue-router';
+
+const Button = defineAsyncComponent(() => import('@/components/Button.vue'));
+const Link = defineAsyncComponent(() => import('@/components/Link.vue'));
+const Input = defineAsyncComponent(() => import('@/components/Input.vue'));
 
 useLoad();
 const router = useRouter();

@@ -1,17 +1,13 @@
 <template>
-  <button v-bind="$attrs" class="rounded px-2 p-1" :class="[...Object.values(classes)]">
+  <a v-bind="$attrs" class="rounded px-2 p-1" :class="[...Object.values(classes)]">
     <slot />
-  </button>
+  </a>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
 
 const props = defineProps({
-  link: {
-    type: Boolean,
-    default: false,
-  },
   size: {
     type: String,
     default: 'lg',
@@ -23,7 +19,7 @@ const props = defineProps({
 });
 
 const classes = {
-  buttonStyle: `text-white bg-${props.variant}-500 hover:bg-${props.variant}-600`,
+  buttonStyle: `text-${props.variant}-500 hover:text-${props.variant}-600 hover:bg-gray-200`,
   buttonSize: `text-${props.size}`,
 };
 </script>

@@ -1,72 +1,48 @@
 <template>
   <form @submit.prevent="onSubmit" novalidate>
-    <div class="row">
-      <div class="col text-center">
-        <h3>Inicio de sesión</h3>
+    <div class="flex my-6">
+      <div class="w-full text-center">
+        <h3 class="text-2xl font-bold">Inicio de sesión</h3>
       </div>
     </div>
-    <div class="row my-3">
-      <div class="col text-center">
-        <input
-          :class="`form-control ${
-            v$.userEmail.$dirty
-              ? !v$.userEmail.$invalid
-                ? 'is-valid'
-                : 'is-invalid'
-              : ''
-          }`"
+    <div class="flex my-3">
+      <div class="w-full text-center">
+        <Input
+          v-model="v$.userEmail.$model"
           data-testid="login-email"
           placeholder="Correo"
-          v-model="v$.userEmail.$model"
           type="email"
-          autocomplete="off"
-        />
+          :invalid="v$.userEmail.$invalid"
+        ></Input>
       </div>
     </div>
-    <div class="row my-3">
-      <div class="col text-center">
-        <input
-          :class="`form-control ${
-            v$.userPassword.$dirty
-              ? !v$.userPassword.$invalid
-                ? 'is-valid'
-                : 'is-invalid'
-              : ''
-          }`"
+    <div class="flex my-3">
+      <div class="w-full text-center">
+        <Input
           placeholder="Contraseña"
           data-testid="login-userPassword"
           v-model="v$.userPassword.$model"
+          :invalid="v$.userPassword.$invalid"
           type="password"
-          autocomplete="off"
-        />
+        ></Input>
       </div>
     </div>
-    <div class="row my-4">
-      <div class="col text-center">
-        <Button type="submit" data-testid="login-submit" variant="primary"
-          >Iniciar sesión</Button
-        >
+    <div class="flex my-4">
+      <div class="w-full text-center">
+        <Button type="submit" data-testid="login-submit">Iniciar sesión</Button>
       </div>
     </div>
-    <div class="row my-2">
-      <div class="col text-center">
+    <div class="flex my-2">
+      <div class="w-full text-center">
         <router-link :to="{ name: 'register' }">
-          <Button type="submit" data-testid="login-register" variant="link" size="sm"
-            >Registrarse</Button
-          >
+          <Link size="sm" data-testid="login-register">Registrarse</Link>
         </router-link>
       </div>
     </div>
-    <div class="row my-2">
-      <div class="col text-center">
+    <div class="flex my-2">
+      <div class="w-full text-center">
         <router-link :to="{ name: 'reset-password' }">
-          <Button
-            type="submit"
-            data-testid="login-reset-password"
-            variant="link"
-            size="sm"
-            >Recuperar contraseña</Button
-          >
+          <Link size="sm" data-testid="login-reset-password">Recuperar contraseña</Link>
         </router-link>
       </div>
     </div>
@@ -82,6 +58,8 @@ import useFirebase from '@/use/firebase/index';
 import { useRouter } from 'vue-router';
 
 const Button = defineAsyncComponent(() => import('@/components/Button.vue'));
+const Link = defineAsyncComponent(() => import('@/components/Link.vue'));
+const Input = defineAsyncComponent(() => import('@/components/Input.vue'));
 
 useLoad();
 const router = useRouter();

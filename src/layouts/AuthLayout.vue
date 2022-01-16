@@ -1,9 +1,9 @@
 <template>
   <div class="auth-layout">
-    <div class="row g-0 align-items-center">
-      <div class="col align-self-center">
-        <div class="card border-0 shadow rounded p-3">
-          <div class="card-body m-5">
+    <div class="flex flex-wrap">
+      <div class="w-full align-self-center">
+        <div class="border-0 rounded-xl shadow-xl p-3">
+          <div class="m-5">
             <slot />
           </div>
         </div>
@@ -14,7 +14,7 @@
 
 <script setup lang="ts"></script>
 
-<style lang="scss" scoped>
+<style>
 .auth-layout {
   display: grid;
   place-items: center;
