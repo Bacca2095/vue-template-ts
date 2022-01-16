@@ -9,7 +9,7 @@
       <div class="w-full text-center">
         <Input
           placeholder="Correo"
-          :invalid="v$.email.$invalid"
+          :invalid="v$.email.$dirty ? v$.email.$invalid : null"
           v-model="v$.email.$model"
           type="email"
         />
@@ -20,7 +20,7 @@
         <Input
           placeholder="Contraseña"
           v-model="v$.password.$model"
-          :invalid="v$.password.$invalid"
+          :invalid="v$.password.$dirty ? v$.password.$invalid : null"
           type="password"
           autocomplete="off"
         />

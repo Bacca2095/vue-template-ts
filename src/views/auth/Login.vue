@@ -12,7 +12,7 @@
           data-testid="login-email"
           placeholder="Correo"
           type="email"
-          :invalid="v$.userEmail.$invalid"
+          :invalid="v$.userEmail.$dirty ? v$.userEmail.$invalid : null"
         ></Input>
       </div>
     </div>
@@ -22,7 +22,7 @@
           placeholder="Contraseña"
           data-testid="login-userPassword"
           v-model="v$.userPassword.$model"
-          :invalid="v$.userPassword.$invalid"
+          :invalid="v$.userPassword.$dirty ? v$.userPassword.$invalid : null"
           type="password"
         ></Input>
       </div>

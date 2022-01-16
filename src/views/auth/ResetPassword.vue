@@ -10,7 +10,7 @@
         <Input
           placeholder="Correo"
           v-model="v$.email.$model"
-          :invalid="v$.email.$invalid"
+          :invalid="v$.email.$dirty ? v$.email.$invalid : null"
           type="email"
         />
       </div>
