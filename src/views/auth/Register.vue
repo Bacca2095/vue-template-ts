@@ -7,7 +7,12 @@
     </div>
     <div class="flex my-3">
       <div class="w-full text-center">
-        <Input placeholder="Correo" v-model="v$.email.$model" type="email" />
+        <Input
+          placeholder="Correo"
+          :invalid="v$.email.$invalid"
+          v-model="v$.email.$model"
+          type="email"
+        />
       </div>
     </div>
     <div class="flex my-3">
@@ -15,6 +20,7 @@
         <Input
           placeholder="Contraseña"
           v-model="v$.password.$model"
+          :invalid="v$.password.$invalid"
           type="password"
           autocomplete="off"
         />

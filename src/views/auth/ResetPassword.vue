@@ -7,7 +7,12 @@
     </div>
     <div class="flex my-3">
       <div class="w-full text-center">
-        <Input placeholder="Correo" v-model="v$.email.$model" type="email" />
+        <Input
+          placeholder="Correo"
+          v-model="v$.email.$model"
+          :invalid="v$.email.$invalid"
+          type="email"
+        />
       </div>
     </div>
     <div class="flex my-4">
