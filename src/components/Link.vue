@@ -19,7 +19,11 @@ const props = defineProps({
 });
 
 const classes = {
-  buttonStyle: `text-${props.variant}-500 hover:text-${props.variant}-600 hover:bg-gray-200`,
-  buttonSize: `text-${props.size}`,
+  linkStyle: ` hover:text-${props.variant}-600 hover:bg-gray-200`,
+  linkPadding: 'px-2 p-1',
+  linkTransition:
+    'transition ease-in-out delay-150 duration-300 hover:-translate-y-1 hover:scale-110',
+  linkText: `text-${props.variant}-500 text-${props.size}`,
+  linkRounded: 'rounded',
 };
 </script>

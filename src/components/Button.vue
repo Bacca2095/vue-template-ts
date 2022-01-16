@@ -1,5 +1,5 @@
 <template>
-  <button v-bind="$attrs" class="rounded px-2 p-1" :class="[...Object.values(classes)]">
+  <button v-bind="$attrs" :class="[...Object.values(classes)]">
     <slot />
   </button>
 </template>
@@ -23,7 +23,10 @@ const props = defineProps({
 });
 
 const classes = {
-  buttonStyle: `text-white bg-${props.variant}-500 hover:bg-${props.variant}-600`,
-  buttonSize: `text-${props.size}`,
+  buttonStyle: ` bg-${props.variant}-500 hover:bg-${props.variant}-600`,
+  buttonPadding: 'px-2 p-1',
+  buttonTransition: 'transition ease-in-out delay-150 duration-300',
+  buttonText: `text-white text-${props.size}`,
+  buttonRounded: 'rounded',
 };
 </script>
